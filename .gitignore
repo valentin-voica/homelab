@@ -1,0 +1,22 @@
+# Ignore Docker files
+*.env
+*.log
+
+# Ignore Docker volumes
+volumes/
+**/data/
+**/db/
+
+# Ignore temporary files and directories
+tmp/
+temp/
+.cache/
+*.swp
+*.backup
+
+# Ignore local development files
+docker-compose.override.yml
+docker-compose.local.yml
+
+# Ignore Dockerfile-specific files
+Dockerfile.*
