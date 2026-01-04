@@ -1,0 +1,18 @@
+services:
+  mealie:
+    container_name: mealie
+    image: hkotel/mealie:latest
+    restart: unless-stopped
+    env_file: ./mealie.env
+    volumes:
+      - ./mealie_data/:/app/data
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - caddy
+    labels:
+      caddy: recipes.example.com
+      caddy.reverse_proxy: "{{upstreams 9000}}"
+
+networks:
+  caddy:
+    external: true

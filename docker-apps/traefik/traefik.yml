@@ -1,0 +1,23 @@
+# ~/config/traefik/traefik.yml
+
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:2.10
+    networks:
+      - web
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /home/valentin/config/traefik/traefik.toml:/traefik.toml
+      - /home/valentin/config/traefik/traefik_dynamic.toml:/traefik_dynamic.toml
+      - /home/valentin/config/traefik/acme.json:/acme.json
+      - /home/valentin/config/traefik/log/traefik.log:/traefik.log
+
+networks:
+  web:
+    external: true

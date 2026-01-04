@@ -1,0 +1,22 @@
+# ~/config/traefik/traefik_dynamic.toml
+
+# http routing section
+[http]
+  [http.routers]
+    # Define a connection between requests and services
+    [http.routers.api]
+      entrypoints = ["websecure"]
+      rule = "Host(`proxy.example.com`)"
+      # If the rule matches, apply the middleware
+      middlewares = ["simpleAuth"]
+      # If the rule matches, forward to the api service (declared below)
+      service = "api@internal"
+        [http.routers.api.tls]
+          certResolver = "letsencrypt"
+
+  [http.middlewares]
+    [http.middlewares.simpleAuth]
+      [http.middlewares.simpleAuth.basicAuth]
+        users = [
+          "user_name:password_hash"
+        ]

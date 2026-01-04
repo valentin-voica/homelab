@@ -1,0 +1,37 @@
+# ~/config/jellyfin/jellyfin.yml
+
+version: "3.9"
+
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - JELLYFIN_PublishedServerUrl=video.example.com
+    volumes:
+      - /home/valentin/appdata/jellyfin:/config
+#      - /home/valentin/media/films:/data/films
+      - /home/valentin/media/tvprogrammes:/data/tvprogrammes
+#      - /home/valentin/media/tvseries:/data/tvseries
+      - /home/valentin/media/concerts:/data/concerts
+      - /home/valentin/media/musicals:/data/musicals
+      - /home/valentin/media/hobby:/data/hobby
+      - /home/valentin/media/youtube:/data/youtube
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=web"
+        - "traefik.http.routers.videos.rule=Host(`video.example.com`)"
+        - "traefik.http.routers.videos.entrypoints=websecure"
+        - "traefik.http.routers.videos.tls.certResolver=letsencrypt"
+        - "traefik.http.services.videos.loadbalancer.server.port=8096"
+    networks:
+      - web
+    ports:
+      - 8096:8096
+
+networks:
+  web:
+    external: true

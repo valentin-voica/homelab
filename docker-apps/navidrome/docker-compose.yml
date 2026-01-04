@@ -1,0 +1,44 @@
+services:
+  navidrome:
+    container_name: navidrome
+    image: deluan/navidrome:latest
+    restart: unless-stopped
+    environment:
+      # Optional: put your config options customization here.
+
+      # Basic configuration
+      ND_LOGLEVEL: warn # possible values: error, warn, info (default), debug, trace
+      ND_BASEURL: https://music.example.com
+      ND_PORT: 4545
+
+      # Advanced Configuration
+      # last.fm
+#      ND_LASTFM_ENABLED: true
+#      ND_LASTFM_APIKEY: 659677ccc49b76fbdb2c666d68cfb200
+#      ND_LASTFM_SECRET: a3e92cb9196ffd47dec6604eabd8f64f
+#      ND_LASTFM_LANGUAGE: "en"
+      # Backup
+      ND_BACKUP_PATH: /backup
+      ND_BACKUP_SCHEDULE: "30 1 * * 0"
+      ND_BACKUP_COUNT: 1
+      # Scanner
+      ND_SCANNER_PURGEMISSING: "full"
+      # Persistent IDs
+      ND_PID_ALBUM: "albumartistid,album,albumversion,releasedate"
+
+    user: 1000:1000 # should be owner of volumes
+    volumes:
+      - ./data:/data
+      - ./config_backup:/backup
+      - /mnt/<volume>/music:/music:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - caddy
+    labels:
+      caddy: music.example.com
+      caddy.reverse_proxy: "{{upstreams 4545}}"
+
+networks:
+  caddy:
+    external: true
+
