@@ -28,6 +28,8 @@ Assuming the network interface name is "Wired connection 1" as in the example ab
 
 * DNS IP address: `sudo nmcli connection modify "Wired connection 1" ipv4.dns 192.168.88.1`
 
+* DNS search order: `sudo nmcli connection modify "Wired connection 1" ipv4.dns-search "example.internal"`
+
 Restart the network connection
 
 `sudo nmcli connection down "Wired connection 1" && sudo nmcli connection up "Wired connection 1"`
