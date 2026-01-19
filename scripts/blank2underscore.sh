@@ -1,44 +1,38 @@
 #!/bin/bash
 
-# Get the current directory
-DIR=$(pwd)
+# Counters for files and directories renamed
+file_count=0
+dir_count=0
 
-# Initialize a counter for renamed files
-renamed_count=0
-
-# Function to rename files in a given directory
-rename_files() {
-  local current_dir="$1"
-
-  # Iterate through each file and subdirectory in the current directory
-  for item in "$current_dir"/*; do
-    # If it's a directory, call the function recursively
-    if [ -d "$item" ]; then
-      # Create a new name for the directory by replacing spaces with underscores
-      local new_dir="${item// /_}"
-      if [ "$item" != "$new_dir" ]; then
-        mv "$item" "$new_dir"  # Rename directory first
-        echo "Renamed Directory: $(basename "$item") -> $(basename "$new_dir")"
-        ((renamed_count++))  # Increment the counter for renamed directories
-      fi
-      rename_files "$new_dir"  # Process the renamed directory
-    elif [ -f "$item" ]; then
-      # Create the new filename by replacing spaces with underscores
-      local new_file="${item// /_}"
-
-      # Rename the file only if the new filename is different
-      if [ "$item" != "$new_file" ]; then
-        mv "$item" "$new_file"
-        echo "Renamed File: $(basename "$item") -> $(basename "$new_file")"
-        ((renamed_count++))  # Increment the counter
-      fi
-    fi
-  done
+# Function to replace spaces with underscores
+replace_spaces() {
+    for item in "$1"/*; do
+        # Check if the item is a directory
+        if [[ -d "$item" ]]; then
+            new_name="$(echo "$item" | sed 's/ /_/g')"
+            if [[ "$item" != "$new_name" ]]; then
+                mv -v "$item" "$new_name"  # Rename the directory
+                ((dir_count++))  # Increment directory counter
+            fi
+            # Recur into the renamed directory
+            replace_spaces "$new_name"
+        fi
+        
+        # Check if the item is a file
+        if [[ -f "$item" ]]; then
+            new_name="$(echo "$item" | sed 's/ /_/g')"
+            if [[ "$item" != "$new_name" ]]; then
+                mv -v "$item" "$new_name"  # Rename the file
+                ((file_count++))  # Increment file counter
+            fi
+        fi
+    done
 }
 
-# Call the function on the current directory
-rename_files "$DIR"
+# Start the script from the current directory
+replace_spaces "."
 
-# Print the summary
-echo "Summary: Renamed $renamed_count item(s)."
-
+# Summary of renamed items
+echo "Renaming complete."
+echo "Total files renamed: $file_count"
+echo "Total directories renamed: $dir_count"
