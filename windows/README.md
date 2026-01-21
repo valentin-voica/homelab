@@ -25,7 +25,7 @@ After you run the above command, you will see that the property `hypervisorlaunc
 `[...]`
 `hypervisorlaunchtype    Auto`
 
-![](media/oracle_vm-hyper_v.png)
+<img width="1357" height="763" alt="oracle_vm-hyper_v" src="https://github.com/user-attachments/assets/6c7e78b3-0c22-444f-9781-f2ef98c9cac1" />
 
 ### Disable Hyper-V and enable VirtualBox
 
