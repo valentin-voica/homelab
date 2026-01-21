@@ -7,7 +7,6 @@
 * EXIF Date Changer
 * ExifTool and ExifToolGUI
 * PhotoMove 2.5
-(for the Pro version: Email: valentin@voica.uk, Password: 18230662)
 * Remove Empty Directories (RED)
 * SD Memory Card Formatter
 * H2testw (SD card performance test for reading and writing data)
