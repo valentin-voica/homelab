@@ -14,8 +14,8 @@ services:
       # Advanced Configuration
       # last.fm
 #      ND_LASTFM_ENABLED: true
-#      ND_LASTFM_APIKEY: 659677ccc49b76fbdb2c666d68cfb200
-#      ND_LASTFM_SECRET: a3e92cb9196ffd47dec6604eabd8f64f
+#      ND_LASTFM_APIKEY: <last.fm_api-key>
+#      ND_LASTFM_SECRET: <last.fm_secret>
 #      ND_LASTFM_LANGUAGE: "en"
       # Backup
       ND_BACKUP_PATH: /backup
