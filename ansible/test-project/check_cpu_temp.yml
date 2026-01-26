@@ -1,0 +1,17 @@
+---
+- name: Check CPU Temperature for Pi-hole
+  hosts: pi-hole
+  become: yes
+  tasks:
+    - name: Install lm-sensors if not already installed
+      apt:
+        name: lm-sensors
+        state: present
+
+    - name: Check CPU temperature
+      command: sensors
+      register: cpu_temp
+
+    - name: Print CPU temperature
+      debug:
+        msg: "CPU Temperature: {{ cpu_temp.stdout }}"
