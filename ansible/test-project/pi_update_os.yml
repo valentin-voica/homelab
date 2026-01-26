@@ -1,6 +1,6 @@
 ---
 - name: Update and Upgrade Raspberry Pi OS
-  hosts: servers
+  hosts: all
   become: yes
   tasks:
     - name: Update the package list

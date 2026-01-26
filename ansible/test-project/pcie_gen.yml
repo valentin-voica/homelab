@@ -1,0 +1,15 @@
+- name: Get PCIe Generation Information
+  hosts: all
+  become: yes
+  tasks:
+    - name: Retrieve PCIe generation using lspci
+      command: lspci -vvv
+      register: lspci_output
+
+    - name: Extract PCIe link capabilities
+      set_fact:
+        pcie_gen_info: "{{ lspci_output.stdout_lines | select('search', 'LnkCap') | list }}"
+
+    - name: Display PCIe generation information
+      debug:
+        msg: "{{ pcie_gen_info }}"

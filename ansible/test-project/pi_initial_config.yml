@@ -1,11 +1,11 @@
 ---
-- name: Configure Raspberry Pi OS
-  hosts: frigate
+- name: Initial Configuration for Raspberry Pi OS
+  hosts: all
   become: yes
   tasks:
-    - name: Set hostname to 'frigate'
+    - name: Set hostname to '{{ inventory_hostname }}'  # Dynamic hostname setting
       hostname:
-        name: frigate
+        name: "{{ inventory_hostname }}"
 
     - name: Check for wireless devices
       command: iw dev
@@ -73,4 +73,4 @@
     - name: Reboot to apply changes
       reboot:
         msg: "Rebooting to apply configuration changes..."
-      when: ansible_facts["hostname"] == "frigate"
+      when: ansible_facts["hostname"] == inventory_hostname
