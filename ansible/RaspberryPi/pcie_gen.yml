@@ -1,8 +1,9 @@
+---
 - name: Get PCIe Generation Information
   hosts: all
   become: yes
   tasks:
-    - name: Retrieve PCIe generation using lspci
+    - name: Retrieve PCIe information using lspci
       command: lspci -vvv
       register: lspci_output
 
@@ -13,3 +14,10 @@
     - name: Display PCIe generation information
       debug:
         msg: "{{ pcie_gen_info }}"
+      when: pcie_gen_info | length > 0
+
+    - name: Handle case where no PCIe information is found
+      debug:
+        msg: "No PCIe generation information found."
+      when: pcie_gen_info | length == 0
+
