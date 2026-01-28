@@ -1,0 +1,64 @@
+---
+- name: Initial Configuration for Raspberry Pi OS
+  hosts: all
+  become: yes
+  tasks:
+    - name: Set hostname to '{{ inventory_hostname }}'  # Dynamic hostname setting
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Disable unwanted hardware interfaces
+      block:
+        - name: Disable RPi Connect
+          lineinfile:
+            path: /boot/config.txt
+            line: "dtoverlay=disable-wifi"
+            state: present
+
+        - name: Disable VNC
+          lineinfile:
+            path: /boot/config.txt
+            line: "disable_vnc=1"
+            state: present
+
+        - name: Disable SPI
+          lineinfile:
+            path: /boot/config.txt
+            line: "dtparam=spi=off"
+            state: present
+
+        - name: Disable I2C
+          lineinfile:
+            path: /boot/config.txt
+            line: "dtparam=i2c_arm=off"
+            state: present
+            
+        - name: Disable Serial Port
+          lineinfile:
+            path: /boot/config.txt
+            line: "enable_uart=0"
+            state: present
+            
+        - name: Disable 1-Wire
+          lineinfile:
+            path: /boot/config.txt
+            line: "dtoverlay=w1-gpio,gpiopin=4,pullup=1"
+            state: absent
+
+    - name: Expand filesystem
+      command: raspi-config nonint do_expand_rootfs
+
+    - name: Enable PCIe Gen 3
+      lineinfile:
+        path: /boot/config.txt
+        line: "dtoverlay=pciex1_gen=3"
+        state: present
+
+    - name: Notify about reboot
+      debug:
+        msg: "Rebooting to apply configuration changes..."
+
+    - name: Reboot to apply changes
+      reboot:
+        msg: "Rebooting to apply configuration changes..."
+

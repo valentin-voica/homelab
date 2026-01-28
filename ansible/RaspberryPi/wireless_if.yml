@@ -22,3 +22,8 @@
       debug:
         var: interface_status.stdout
       when: wireless_interface.stdout | length > 0
+
+    - name: Bring down the Wireless LAN interface if it is up
+      command: ip link set {{ wireless_interface.stdout }} down
+      when: "'UP' in interface_status.stdout"  # Check if the interface status shows it is up
+
