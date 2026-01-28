@@ -1,0 +1,25 @@
+---
+- name: Update and Upgrade Raspberry Pi OS
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update the package list
+      apt:
+        update_cache: yes
+      register: update_result
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist
+      register: upgrade_result
+
+    - name: Notify of package update outcome
+      debug:
+        msg: "Package list updated successfully."
+      when: update_result is changed
+
+    - name: Notify of package upgrade outcome
+      debug:
+        msg: "Packages upgraded successfully."
+      when: upgrade_result is changed
+
