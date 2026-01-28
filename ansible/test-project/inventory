@@ -1,3 +1,0 @@
-[servers]
-frigate ansible_host=frigate ansible_user=valentin ansible_python_interpreter=/usr/bin/python3
-pi-hole ansible_host=pi-hole ansible_user=valentin ansible_python_interpreter=/usr/bin/python3

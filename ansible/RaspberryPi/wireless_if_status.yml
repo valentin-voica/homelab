@@ -1,0 +1,24 @@
+---
+- name: Wireless Interface Status Check for Raspberry Pi OS
+  hosts: all
+  become: yes
+  tasks:
+    - name: Check for wireless devices
+      command: iw dev
+      register: iw_output
+      ignore_errors: yes
+
+    - name: Get wireless interface name
+      shell: "iw dev | grep Interface | awk '{print $2}'"
+      register: wireless_interface
+      when: iw_output.rc == 0  # Only run if iw dev command was successful
+
+    - name: Get Wireless LAN interface status
+      command: ip link show {{ wireless_interface.stdout }}
+      register: interface_status
+      when: wireless_interface.stdout | length > 0
+
+    - name: Display Wireless LAN interface status
+      debug:
+        var: interface_status.stdout
+      when: wireless_interface.stdout | length > 0
